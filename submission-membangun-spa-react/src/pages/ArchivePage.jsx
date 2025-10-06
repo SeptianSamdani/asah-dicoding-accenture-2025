@@ -1,36 +1,33 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useArchivedNotes } from '../hooks/useNotes.js';
 import NoteList from '../components/NoteList.jsx';
-import SearchBar from '../components/SearchBar.jsx';
+import Loader from '../components/Loader.jsx';
 
+export default function ArchivePage() {
+  const [params, setParams] = useSearchParams();
+  const q = (params.get('q') || '').toLowerCase();
+  const { notes, loading, err, actions } = useArchivedNotes();
+  const filtered = q ? notes.filter(n => n.title.toLowerCase().includes(q)) : notes;
 
-export default function ArchivePage({ notes, api }) {
-    const [params] = useSearchParams();
-    const q = (params.get('q') || '').toLowerCase();
-
-
-    const archivedNotes = useMemo(() => notes.filter((n) => n.archived), [notes]);
-    const filtered = useMemo(() => (
-    q ? archivedNotes.filter((n) => n.title.toLowerCase().includes(q)) : archivedNotes
-    ), [archivedNotes, q]);
-
-
-    return (
-        <section>
-            <h1>Arsip Catatan</h1>
-            <SearchBar placeholder="Cari di arsip…" />
-            <NoteList notes={filtered} onDelete={api.deleteNote} onToggleArchive={api.toggleArchive} emptyText="Arsip kosong" />
-        </section>
-    );
+  return (
+    <section>
+      <h1>Arsip Catatan</h1>
+      <input
+        className="search"
+        type="search"
+        placeholder="Cari di arsip…"
+        value={q}
+        onChange={(e) => e.target.value ? setParams({ q: e.target.value }) : setParams({})}
+      />
+      {loading ? <Loader/> : err ? <p className="empty">{err}</p> : (
+        <NoteList
+          notes={filtered}
+          onDelete={(id) => actions.deleteNote(id)}
+          onToggleArchive={(id) => actions.toggleArchive(id)}
+          emptyText="Arsip kosong"
+        />
+      )}
+    </section>
+  );
 }
-
-
-ArchivePage.propTypes = {
-    notes: PropTypes.array.isRequired,
-    api: PropTypes.shape({
-        addNote: PropTypes.func.isRequired,
-        deleteNote: PropTypes.func.isRequired,
-        toggleArchive: PropTypes.func.isRequired,
-    }).isRequired,
-};

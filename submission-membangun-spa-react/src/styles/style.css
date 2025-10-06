@@ -160,17 +160,209 @@ button.danger:hover, .danger:hover { filter: brightness(.95); }
 }
 .search:focus { outline: none; border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.2); }
 
-.note-form { display: grid; gap: .75rem; }
-.note-form label { display: grid; gap: .35rem; }
-.note-form input[type="text"] { padding: .6rem .8rem; border: 1px solid #ddd; border-radius: .5rem; }
-.content-editable { border: 1px solid #ddd; border-radius: .5rem; min-height: 160px; padding: .6rem .8rem; background: #fff; }
-.content-editable:empty:before { content: attr(data-placeholder); color: #999; }
-.form-actions { display: flex; gap: .5rem; }
+.note-form { 
+  display: grid; 
+  gap: .75rem; 
+}
+.note-form label { 
+  display: grid; 
+  gap: .35rem; 
+}
+.note-form input[type="text"] { 
+  padding: .6rem .8rem; 
+  border: 1px solid #ddd; 
+  border-radius: .5rem; 
+}
+.content-editable { 
+  border: 1px solid #ddd; 
+  border-radius: .5rem; 
+  min-height: 160px; 
+  padding: .6rem .8rem; 
+  background: #fff; 
+}
+.content-editable:empty:before { 
+  content: attr(data-placeholder); 
+  color: #999; 
+}
+.form-actions { 
+  display: flex; 
+  gap: .5rem; 
+}
 
 /* ====== Detail Page ====== */
-.detail { background: #fff; border: 1px solid #eee; border-radius: .75rem; padding: 1rem; }
-.detail-header { display: flex; flex-direction: column; gap: .35rem; margin-bottom: .5rem; }
-.detail-body p { line-height: 1.6; }
+.detail { 
+  background: #fff; 
+  border: 1px solid #eee; 
+  border-radius: .75rem; 
+  padding: 1rem; 
+}
+
+.detail-header { 
+  display: flex; 
+  flex-direction: column; 
+  gap: .35rem; 
+  margin-bottom: .5rem; 
+}
+
+.detail-body p { 
+  line-height: 1.6; 
+}
 
 /* ====== Row Actions (Detail) ====== */
-.row-actions { display: flex; gap: .5rem; margin-top: .25rem; }
+.row-actions { 
+  display: flex;
+  gap: .5rem; 
+  margin-top: .25rem; 
+}
+
+/* ========= Dark Theme: Gold / Amber ========= */
+:root[data-theme="dark"] {
+  --bg: #0b0b0b;
+  --card: #121212;
+  --border: #1f1f1f;
+
+  /* warna utama & teks untuk dark */
+  --text: #f7e7b0;              /* gold lembut sebagai teks utama */
+  --muted: #c8bb8a;             /* gold redup untuk teks sekunder */
+  --accent: #f59e0b;            /* amber/gold untuk tombol/link utama */
+  --accent-contrast: #111;      /* teks di atas tombol amber */
+
+  color-scheme: dark;
+}
+
+/* warna teks & background dasar */
+:root[data-theme="dark"] body {
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* kontainer kartu & border */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .detail {
+  background: var(--card);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  border-color: #2a2a2a;
+}
+
+:root[data-theme="dark"] .card-body,
+:root[data-theme="dark"] .note-body,
+:root[data-theme="dark"] .detail-body {
+  color: #facc15; /* amber-400 */
+}
+
+/* heading & link */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] a {
+  color: var(--text);
+}
+:root[data-theme="dark"] .brand { color: var(--text); }
+:root[data-theme="dark"] .muted { color: var(--muted); }
+
+/* nav & tombol utama */
+:root[data-theme="dark"] .nav .primary,
+:root[data-theme="dark"] button.primary,
+:root[data-theme="dark"] .primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+:root[data-theme="dark"] .nav a:hover {
+  background: rgba(245, 158, 11, 0.12);
+}
+
+/* tombol umum */
+:root[data-theme="dark"] button,
+:root[data-theme="dark"] .button,
+:root[data-theme="dark"] input[type="submit"] {
+  background: #171717;
+  border-color: #2a2a2a;
+  color: var(--text);
+}
+:root[data-theme="dark"] button:hover,
+:root[data-theme="dark"] .button:hover,
+:root[data-theme="dark"] input[type="submit"]:hover {
+  border-color: #3a3a3a;
+  background: #1c1c1c;
+}
+
+/* tombol ghost mengikuti aksen gold */
+:root[data-theme="dark"] button.ghost,
+:root[data-theme="dark"] .ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: #3a300f; /* gelap kekuningan */
+}
+:root[data-theme="dark"] button.ghost:hover,
+:root[data-theme="dark"] .ghost:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #6b4c08;
+}
+
+/* tombol danger tetap merah tapi disesuaikan dengan dark */
+:root[data-theme="dark"] button.danger,
+:root[data-theme="dark"] .danger {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #fff7ed;
+}
+:root[data-theme="dark"] button.danger:hover,
+:root[data-theme="dark"] .danger:hover {
+  filter: brightness(.95);
+}
+
+/* focus ring bernuansa gold */
+:root[data-theme="dark"] button:focus-visible,
+:root[data-theme="dark"] .button:focus-visible,
+:root[data-theme="dark"] input[type="submit"]:focus-visible,
+:root[data-theme="dark"] .search:focus {
+  outline: 3px solid rgba(245, 158, 11, 0.55);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22);
+  border-color: #d97706;
+}
+
+/* search input & text fields */
+:root[data-theme="dark"] .search,
+:root[data-theme="dark"] .note-form input[type="text"],
+:root[data-theme="dark"] .note-form input[type="email"],
+:root[data-theme="dark"] .note-form input[type="password"],
+:root[data-theme="dark"] .content-editable {
+  background: #0f0f0f;
+  color: var(--text);
+  border: 1px solid #2a2a2a;
+}
+:root[data-theme="dark"] .content-editable:empty:before { color: #8a7a47; }
+
+/* badge (contoh: Arsip) bernuansa amber */
+:root[data-theme="dark"] .badge {
+  border-color: #6b4c08;
+  background: rgba(245, 158, 11, 0.12);
+  color: #facc15; /* yellow-400 */
+}
+
+/* empty state */
+:root[data-theme="dark"] .empty {
+  color: var(--muted);
+  border-color: #2a2a2a;
+  background: #0f0f0f;
+}
+
+/* link hover di card-title */
+:root[data-theme="dark"] .card-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: rgba(245, 158, 11, .7);
+}
+
+/* header & footer strip */
+:root[data-theme="dark"] .site-footer {
+  border-top-color: #1f1f1f;
+  color: var(--muted);
+}
+:root[data-theme="dark"] .site-header {
+  background: var(--bg);
+}

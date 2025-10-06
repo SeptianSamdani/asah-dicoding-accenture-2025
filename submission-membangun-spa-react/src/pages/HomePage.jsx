@@ -1,36 +1,37 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useActiveNotes } from '../hooks/useNotes.js';
 import NoteList from '../components/NoteList.jsx';
-import SearchBar from '../components/SearchBar.jsx';
+import Loader from '../components/Loader.jsx';
 
+export default function HomePage({ api }) {
+  const [params, setParams] = useSearchParams();
+  const q = (params.get('q') || '').toLowerCase();
+  const { notes, loading, err, actions } = useActiveNotes();
 
-export default function HomePage({ notes, api }) {
-    const [params] = useSearchParams();
-    const q = (params.get('q') || '').toLowerCase();
+  const filtered = q ? notes.filter(n => n.title.toLowerCase().includes(q)) : notes;
 
-
-    const activeNotes = useMemo(() => notes.filter((n) => !n.archived), [notes]);
-    const filtered = useMemo(() => (
-    q ? activeNotes.filter((n) => n.title.toLowerCase().includes(q)) : activeNotes
-    ), [activeNotes, q]);
-
-
-    return (
-        <section>
-            <h1>Catatan Aktif</h1>
-            <SearchBar />
-            <NoteList notes={filtered} onDelete={api.deleteNote} onToggleArchive={api.toggleArchive} emptyText="Tidak ada catatan" />
-        </section>
-    );
+  return (
+    <section>
+      <h1>Catatan Aktif</h1>
+      <input
+        className="search"
+        type="search"
+        placeholder="Cari judul catatan…"
+        value={q}
+        onChange={(e) => e.target.value ? setParams({ q: e.target.value }) : setParams({})}
+      />
+      {loading ? <Loader/> : err ? <p className="empty">{err}</p> : (
+        <NoteList
+          notes={filtered}
+          onDelete={(id) => actions.deleteNote(id)}
+          onToggleArchive={(id) => {
+            const n = notes.find(x => x.id === id);
+            actions.toggleArchive(id, n?.archived);
+          }}
+          emptyText="Tidak ada catatan"
+        />
+      )}
+    </section>
+  );
 }
-
-
-HomePage.propTypes = {
-    notes: PropTypes.array.isRequired,
-    api: PropTypes.shape({
-        addNote: PropTypes.func.isRequired,
-        deleteNote: PropTypes.func.isRequired,
-        toggleArchive: PropTypes.func.isRequired,
-    }).isRequired,
-};
