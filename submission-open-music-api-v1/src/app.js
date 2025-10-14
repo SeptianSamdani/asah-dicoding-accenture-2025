@@ -14,7 +14,6 @@ app.use((req, res) => {
 return res.status(404).json({ status: 'fail', message: 'Halaman tidak ditemukan' });
 });
 
-
 // Centralized error handler
 app.use((err, req, res, next) => {
 if (err instanceof ClientError) {
