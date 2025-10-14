@@ -1,0 +1,349 @@
+{
+  "info": {
+    "name": "OpenMusic API v1 — Express + PostgreSQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Koleksi Postman resmi untuk menguji Submission OpenMusic API v1 (Express + PostgreSQL). Urutan eksekusi yang disarankan: Add Album → Get Album → Add Song → Get Songs → Get Song by ID → Update/Delete."
+  },
+  "item": [
+    {
+      "name": "Albums",
+      "item": [
+        {
+          "name": "Add Album",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Viva la Vida\",\n  \"year\": 2008\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/albums",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "albums"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "var json = pm.response.json();",
+                  "pm.expect(json.status).to.eql('success');",
+                  "pm.expect(json.data).to.have.property('albumId');",
+                  "pm.collectionVariables.set('albumId', json.data.albumId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Album by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/albums/{{albumId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "albums",
+                "{{albumId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Album object exists', function () {",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.data).to.have.property('album');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Album",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"A Head Full of Dreams\",\n  \"year\": 2015\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/albums/{{albumId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "albums",
+                "{{albumId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Album",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/albums/{{albumId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "albums",
+                "{{albumId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Songs",
+      "item": [
+        {
+          "name": "Add Song",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Life in Technicolor\",\n  \"year\": 2008,\n  \"performer\": \"Coldplay\",\n  \"genre\": \"Indie\",\n  \"duration\": 120,\n  \"albumId\": \"{{albumId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/songs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "var json = pm.response.json();",
+                  "pm.expect(json.data).to.have.property('songId');",
+                  "pm.collectionVariables.set('songId', json.data.songId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Songs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/songs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Songs (Filter)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/songs?title=life&performer=cold",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "life"
+                },
+                {
+                  "key": "performer",
+                  "value": "cold"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Song by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/songs/{{songId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs",
+                "{{songId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Song",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Paradise\",\n  \"year\": 2011,\n  \"performer\": \"Coldplay\",\n  \"genre\": \"Pop\",\n  \"duration\": 250,\n  \"albumId\": \"{{albumId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/songs/{{songId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs",
+                "{{songId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Song",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/songs/{{songId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "songs",
+                "{{songId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "albumId",
+      "value": ""
+    },
+    {
+      "key": "songId",
+      "value": ""
+    }
+  ]
+}
