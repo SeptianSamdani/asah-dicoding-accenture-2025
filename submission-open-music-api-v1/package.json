@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate": "node-pg-migrate up",
-    "rollback": "node-pg-migrate down"
+    "migrate": "node-pg-migrate"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -17,7 +16,7 @@
     "pg": "^8.12.0"
   },
   "devDependencies": {
-    "node-pg-migrate": "^7.7.0",
+    "node-pg-migrate": "^7.9.1",
     "nodemon": "^3.1.4"
   },
   "engines": {
