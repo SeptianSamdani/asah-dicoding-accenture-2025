@@ -1,0 +1,8 @@
+/node_modules
+.env
+*.zip
+*.pdf
+*.jpg
+*.png
+dist
+build

@@ -1,0 +1,209 @@
+/* ===================================
+   Notes App - index.css
+   Palette: Background Biru + Panel Putih
+   Prefix: app-
+   =================================== */
+
+/* Tokens */
+:root {
+  --bg: #e0f2fe;          /* biru muda untuk background utama */
+  --panel: #ffffff;       /* putih untuk card & panel */
+  --text: #0f172a;        /* hampir hitam untuk teks */
+  --muted: #475569;       /* abu kebiruan */
+  --line: #dbeafe;        /* garis biru muda */
+  --primary: #2563eb;     /* biru utama */
+  --primary-dark: #1d4ed8;
+
+  --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --focus: 0 0 0 3px rgba(37,99,235,0.3);
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+}
+
+/* Reset ringkas */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+}
+
+button, input, textarea { 
+  font: inherit; 
+}
+
+/* Container */
+.app-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--sp-4);
+  display: grid;
+  gap: var(--sp-4);
+}
+
+/* Header */
+.app-header {
+  z-index: 10;
+  background: var(--primary);
+  border-bottom: 1px solid var(--primary-dark);
+  color: #fff;
+}
+.app-title {
+  margin: 0;
+  padding: var(--sp-4) 0;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Section */
+.app-section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-5);
+}
+.app-sectionTitle {
+  margin: 0 0 var(--sp-3);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+/* Form & fields */
+.app-form { display: grid; gap: var(--sp-4); }
+.app-field { display: grid; gap: var(--sp-2); }
+.app-label { font-size: 14px; color: var(--muted); }
+.app-helper { color: var(--muted); font-size: 12px; }
+
+/* Inputs */
+.app-input,
+.app-textarea,
+.app-searchInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+
+.app-textarea { 
+  resize: vertical; min-height: 100px; 
+}
+
+.app-input:focus,
+.app-textarea:focus,
+.app-searchInput:focus {
+  border-color: var(--primary);
+  box-shadow: var(--focus);
+}
+
+/* Buttons */
+.app-button,
+.app-btn {
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background .15s ease, transform .06s ease, box-shadow .15s ease;
+}
+
+/* Button utama */
+.app-button {
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+.app-button:hover { background: var(--primary-dark); }
+.app-button:active { transform: translateY(1px); }
+.app-button:focus-visible { box-shadow: var(--focus); }
+
+/* Tombol aksi (outline biru) */
+.app-btn-archive {
+  background: #fff;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.app-btn-delete {
+  background: #fff;
+  border: 1px solid red;
+  color: red;
+}
+  
+.app-btn-archive:hover {
+  background: rgba(37,99,235,0.08);
+}
+
+.app-btn-delete:hover {
+  background: rgba(235, 53, 37, 0.08);
+}
+
+/* List & Article */
+.app-list {
+  display: grid;
+  gap: var(--sp-3);
+}
+.app-article {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+  background: #fff;
+  display: grid;
+  gap: var(--sp-3);
+  box-shadow: var(--shadow-sm);
+}
+.app-articleTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+.app-articleMeta { color: var(--muted); font-size: 13px; }
+.app-articleBody { margin: 0; }
+
+/* Actions */
+.app-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* Empty state */
+.app-empty { color: var(--muted); font-style: italic; margin: 0; }
+
+/* Responsif */
+@media (min-width: 920px) {
+  .app-list { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 919px) {
+  .app-list { grid-template-columns: 1fr; }
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 16px;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.app-footer p {
+  margin: 0;
+}
