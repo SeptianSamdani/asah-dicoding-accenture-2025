@@ -9,7 +9,7 @@ import usersRoutes from './routes/users.js';
 import authenticationsRoutes from './routes/authentications.js';
 import playlistsRoutes from './routes/playlists.js';
 import exportsRoutes from './routes/exports.js';
-import uploadsRoutes from './routes/uploads.js';  // ← Import ini
+import uploadsRoutes from './routes/uploads.js';
 import ClientError from './errors/ClientError.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,9 +17,15 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(express.json());
+app.use((req, res, next) => {
+  // Skip JSON parsing untuk upload endpoints
+  if (req.path.includes('/covers')) {
+    return next();
+  }
+  express.json()(req, res, next);
+});
 
-// File upload middleware - PENTING!
+// File upload middleware
 app.use(
   fileUpload({
     limits: { fileSize: 512000 },
@@ -34,14 +40,14 @@ app.use(
   express.static(path.join(__dirname, '../public/uploads/covers'))
 );
 
-// Routes
+// Routes 
+app.use(uploadsRoutes);
 app.use('/albums', albumsRoutes);
 app.use('/songs', songsRoutes);
 app.use('/users', usersRoutes);
 app.use('/authentications', authenticationsRoutes);
 app.use('/playlists', playlistsRoutes);
 app.use('/export', exportsRoutes);
-app.use(uploadsRoutes);  // ← PASTIKAN INI ADA
 
 // 404
 app.use((req, res) => {
@@ -51,8 +57,16 @@ app.use((req, res) => {
   });
 });
 
-// Error handler - UPDATE INI
+// Error handler
 app.use((err, req, res, next) => {
+  // Handle JSON syntax error (Invalid Payload)
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Invalid JSON payload',
+    });
+  }
+
   // Handle file too large
   if (err.code === 'LIMIT_FILE_SIZE') {
     return res.status(413).json({
@@ -61,6 +75,7 @@ app.use((err, req, res, next) => {
     });
   }
 
+  // Handle client errors
   if (err instanceof ClientError) {
     return res.status(err.statusCode).json({
       status: 'fail',
@@ -68,6 +83,7 @@ app.use((err, req, res, next) => {
     });
   }
 
+  // Handle unexpected errors
   console.error(err);
   return res.status(500).json({
     status: 'error',

@@ -31,13 +31,25 @@ class AlbumsService {
       [id]
     );
 
-    return {
+    console.log('Album from DB:', album.rows[0]);
+    console.log('Cover value:', album.rows[0].cover);
+
+    // Build response object
+    const result = {
       id: album.rows[0].id,
       name: album.rows[0].name,
       year: album.rows[0].year,
-      coverUrl: album.rows[0].cover, // Include coverUrl
       songs: songs.rows,
     };
+
+    // Hanya tambahkan coverUrl jika cover tidak null DAN tidak empty string
+    if (album.rows[0].cover && album.rows[0].cover.trim() !== '') {
+      result.coverUrl = album.rows[0].cover;
+    }
+
+    console.log('Final response:', result);
+
+    return result;
   }
 
   async editAlbumById(id, { name, year }) {
@@ -60,6 +72,8 @@ class AlbumsService {
   }
 
   async updateAlbumCover(id, coverUrl) {
+    console.log('Updating cover for album:', id, 'with URL:', coverUrl);
+    
     const result = await pool.query(
       'UPDATE albums SET cover = $1 WHERE id = $2 RETURNING id',
       [coverUrl, id]
@@ -68,6 +82,8 @@ class AlbumsService {
     if (!result.rowCount) {
       throw new NotFoundError('Album tidak ditemukan');
     }
+
+    console.log('Cover updated successfully');
   }
 }
 
